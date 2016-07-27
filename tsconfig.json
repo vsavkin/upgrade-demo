@@ -10,6 +10,7 @@
     },
 	"files": [
 		"src/main.ts",
-		"node_modules/@types/angular/index.d.ts"
+		"node_modules/@types/angular/index.d.ts",
+        "node_modules/@types/angular-route/index.d.ts"
 	]
 }

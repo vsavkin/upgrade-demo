@@ -1,5 +1,6 @@
 //ng1/2 hybrid
 import * as angular from 'angular'
+import * as angularRoute from 'angular-route'
 import { UpgradeAdapter } from '@angular/upgrade';
 import { Ng2Component } from './ng2-app'
 
@@ -25,7 +26,7 @@ ng1Module.component('ng1RootComponent', {
 
 //vanilla ng1 component
 ng1Module.component('ng1Component', {
-	template: `<div>hello {{ctrl.name}} from ng1!</div>`,
+	template: `<div>hello {{ctrl.name}} from ng2!</div>`,
 	bindings: {
 		name: '='
 	},
