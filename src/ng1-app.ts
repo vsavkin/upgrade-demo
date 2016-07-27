@@ -12,12 +12,7 @@ const adapter = new UpgradeAdapter();
 
 //vanilla ng1 root component
 ng1Module.component('ng1RootComponent', {
-	template: `
-	  <div>ng1 app</div>
-	  <input ng-model="ctrl.myName" />
-	  <ng1-component name="ctrl.myName"></ng1-component>
-	  <ng2-component [name]="ctrl.myName"></ng2-component>
-	`,
+	templateUrl: 'templates/ng1-root-template.html',
 	controller: function(){
 		this.myName = 'bob'
 	},
