@@ -18,7 +18,7 @@ FishModule.directive(
 function configRoutes($routeProvider, urlServiceProvider) {
     urlServiceProvider.register('FISH', 'fish');
     $routeProvider.when('/fish/dolphin', {
-        templateUrl: 'dolphin.html'
+        templateUrl: 'templates/dolphin.html'
     }).when('/fish/whale', {
         template: '<whale></whale>'
     });

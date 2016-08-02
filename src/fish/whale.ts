@@ -5,16 +5,13 @@ import {UrlService} from '../service/url';
 
 @Component({
   selector: 'whale',
-  template: '<div>whale!</div>',
+  templateUrl: 'templates/whale.html',
   directives: [COMMON_DIRECTIVES],
 })
 export class WhaleComponent {
     unicornLink: string;
 
-  constructor(
-      // Why I no work? :(
-      @Inject('urlService') urlService: UrlService
-  ) {
-      this.unicornLink = '#/beasts/unicorn';
+  constructor(@Inject('urlService') urlService: UrlService) {
+      this.unicornLink = urlService.getUrl("BEASTS", "unicorn");
   }
 }

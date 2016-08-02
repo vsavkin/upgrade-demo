@@ -34,8 +34,8 @@ ng1Module.config(['$routeProvider', function($routeProvider) {
 			</ul>
 			<h2>Fish</h2>
 			<ul>
-				<li><a href="#/beasts/dolphin">Dolphin</a></li>
-				<li><a href="#/beasts/whale">Whale</a></li>
+				<li><a href="#/fish/dolphin">Dolphin</a></li>
+				<li><a href="#/fish/whale">Whale</a></li>
 			</ul>
 		`
 	});
