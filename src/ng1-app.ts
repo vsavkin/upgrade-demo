@@ -16,9 +16,7 @@ const ng1Module = angular.module('ng1-module', [
 
 //vanilla ng1 root component
 ng1Module.component('ng1RootComponent', {
-	template: `
-	  <div class="ng-view"></div>
-	`,
+	templateUrl: 'templates/ng1-root-template.html',
 	controller: function(){
 		this.myName = 'bob'
 	},
