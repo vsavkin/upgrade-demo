@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/angular": "^1.5.8",
     "@types/angular-route": "*",
+    "clang-format": "^1.0.32",
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.0",
     "webpack": "^1.13.1",
