@@ -12,6 +12,6 @@ export class WhaleComponent {
     unicornLink: string;
 
   constructor(@Inject('urlService') urlService: UrlService) {
-      this.unicornLink = urlService.getUrl("BEASTS", "unicorn");
+      this.unicornLink = "#" + urlService.getUrl("BEASTS", "unicorn");
   }
 }
