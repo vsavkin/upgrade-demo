@@ -1,20 +1,41 @@
 // ng1/2 hybrid
+import {
+  HashLocationStrategy,
+  Location,
+  LocationStrategy
+} from '@angular/common';
+import {
+  Component,
+  ComponentResolver,
+  Inject,
+  Injector,
+  PLATFORM_DIRECTIVES,
+  SkipSelf
+} from '@angular/core';
+import {
+  ROUTER_DIRECTIVES,
+  Route,
+  Router,
+  RouterOutletMap,
+  UrlSerializer,
+  UrlTree,
+  provideRouter
+} from '@angular/router';
 import {UpgradeAdapter} from '@angular/upgrade';
 import * as angular from 'angular'
 import * as angularRoute from 'angular-route'
 
 import {BeastModule} from './beasts/beast_module';
-import {FishModule} from './fish/fish_module';
+import {FISH_ROUTES, FishModule} from './ng2fish/ng2_fish_module';
 import {adapter} from './upgrade/adapter';
+import {setUpNG2Router} from './upgrade/router_upgrade';
 
-// vanilla ng1 module
 const rootModule = angular.module('rootModule', [
   'ngRoute',
   BeastModule.name,
   FishModule.name,
 ]);
 
-// vanilla ng1 root component
 rootModule.component(
     'rootCmp',
     {templateUrl : 'templates/root-template.html', controllerAs : 'ctrl'});
@@ -30,6 +51,7 @@ rootModule.config([
 				<li><a href="#/beasts/unicorn">Unicorn</a></li>
 				<li><a href="#/beasts/yale">Yale</a></li>
 			</ul>
+
 			<h2>Fish</h2>
 			<ul>
 				<li><a href="#/fish/dolphin">Dolphin</a></li>
@@ -40,4 +62,9 @@ rootModule.config([
   }
 ]);
 
-export const bootstrap = (el) => adapter.bootstrap(el, [ 'rootModule' ]);
+setUpNG2Router(adapter, FISH_ROUTES, (url) => url.startsWith("/fish"));
+
+export const bootstrap = (el) => {
+  const ref = adapter.bootstrap(el, [ 'rootModule' ]);
+  setTimeout(() => ref.ng2Injector.get(Router), 0);
+};
