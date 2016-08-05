@@ -7,7 +7,7 @@ import {configureModuleRoot} from '../upgrade/router_upgrade';
 
 import {DolphinCmp} from './ng2_dolphin';
 import {WhaleCmp} from './ng2_whale';
-import {TunaCmp} from './ng2_tuna';
+import {TunaCmp} from './tuna';
 
 export const FISH_ROUTES = [ {
   path : 'fish',
