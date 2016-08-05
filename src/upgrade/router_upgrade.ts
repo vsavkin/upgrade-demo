@@ -92,8 +92,7 @@ class UpgradeRouter extends Router {
   navigate(commands: any[], extras: any = {}): Promise<boolean> {
     const r = this.createUrlTree(commands, extras);
 
-    console.log("navigateTo", r.toString(),
-                this.matches(r.toString())) if (this.matches(r.toString())) {
+    if (this.matches(r.toString())) {
       return this.navigate(commands, extras);
     }
     else {
@@ -104,8 +103,7 @@ class UpgradeRouter extends Router {
   }
 
   navigateByUrl(url: string|UrlTree): Promise<boolean> {
-    console.log("navigateByUrl",
-                url.toString()) if (this.matches(url.toString())) {
+    if (this.matches(url.toString())) {
       return this.navigateByUrl(url);
     }
     else {
