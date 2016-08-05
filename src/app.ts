@@ -56,6 +56,7 @@ rootModule.config([
 			<ul>
 				<li><a href="#/fish/dolphin">Dolphin</a></li>
 				<li><a href="#/fish/whale">Whale</a></li>
+				<li><a href="#/fish/tuna">Tuna</a></li>
 			</ul>
 		`
     });
