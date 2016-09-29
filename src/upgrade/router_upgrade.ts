@@ -9,22 +9,21 @@ import {
 } from '@angular/common';
 import {
   Component,
-  ComponentResolver,
   Inject,
   Injector,
   NgZone,
-  PLATFORM_DIRECTIVES,
-  SkipSelf
+  SkipSelf,
+  Compiler,
+  NgModuleFactoryLoader,
+  Type
 } from '@angular/core';
 import {
-  ROUTER_DIRECTIVES,
   Route,
   Router,
-  RouterConfig,
   RouterOutletMap,
   UrlSerializer,
   UrlTree,
-  provideRouter
+  Routes
 } from '@angular/router';
 import {UpgradeAdapter} from '@angular/upgrade';
 
@@ -72,17 +71,25 @@ class FilteringLocation implements Location {
   }
 }
 
-class UpgradeRouter extends Router {
+export class UpgradeRouter extends Router {
   public loc;
   public rootCmp;
   public storedState;
 
-  constructor(rootComponentType: any, resolver: ComponentResolver,
-              urlSerializer: UrlSerializer, outletMap: RouterOutletMap,
-              location: Location, injector: Injector, config: any,
-              private matches: Function) {
-    super(rootComponentType, resolver, urlSerializer, outletMap,
-          new FilteringLocation(location, matches), injector, config);
+  constructor(rootComponentType: Type<any>, urlSerializer: UrlSerializer,
+      outletMap: RouterOutletMap, location: Location, injector: Injector,
+      loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes, private matches: Function) {
+
+    super(
+      rootComponentType,
+      urlSerializer,
+      outletMap,
+      new FilteringLocation(location, matches),
+      injector,
+      loader,
+      compiler,
+      config
+    );
     this.rootCmp = rootComponentType;
 
     this.loc = location;
@@ -115,61 +122,14 @@ class UpgradeRouter extends Router {
 }
 
 @Component({template : ''})
-class FakeRootCmp {
+export class FakeRootCmp {
 }
 
 @Component(
     {selector : 'module-root', template : `<router-outlet></router-outlet>`})
-class ModuleRootCmp {
+export class ModuleRootCmp {
 }
 
 export function configureModuleRoot(adapter, module) {
-  module.directive('moduleRoot',
-                   <any>adapter.downgradeNg2Component(ModuleRootCmp));
-}
-
-export function setUpNG2Router(adapter: UpgradeAdapter, config: RouterConfig,
-                               filter: Function) {
-  adapter.addProvider(provideRouter(config));
-
-  adapter.addProvider(
-      {provide : LocationStrategy, useClass : HashLocationStrategy});
-
-  adapter.addProvider({
-    provide : PLATFORM_DIRECTIVES,
-    multi : true,
-    useValue : ROUTER_DIRECTIVES
-  });
-
-  adapter.addProvider({
-    provide : Router,
-    useFactory : (resolver: ComponentResolver, urlSerializer: UrlSerializer,
-                  outletMap: RouterOutletMap, location: Location,
-                  injector: Injector, zone: NgZone) => {
-      return zone.run(() => {
-        const r =
-            new UpgradeRouter(FakeRootCmp, resolver, urlSerializer, outletMap,
-                              location, injector, config, filter);
-
-        // r.events.subscribe(e => {
-        //   console.group(`Router Event: ${(<any>e.constructor).name}`);
-        //   console.log(e.toString());
-        //   console.log(e);
-        //   console.groupEnd();
-        // });
-
-        setTimeout(() => {
-          console.log("set up location listener");
-          (<any>r).setUpLocationChangeListener();
-        }, 0);
-
-        return r;
-      });
-
-    },
-    deps : [
-      ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-      NgZone
-    ]
-  });
+  module.directive('moduleRoot', <any>adapter.downgradeNg2Component(ModuleRootCmp));
 }

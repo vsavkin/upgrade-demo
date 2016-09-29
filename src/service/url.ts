@@ -1,5 +1,5 @@
 import * as angular from 'angular';
-import {adapter} from '../upgrade/adapter';
+// import {adapter} from '../upgrade/adapter';
 
 export class UrlProvider {
   // Maps the app section key to the first part of a URL path
@@ -33,5 +33,3 @@ export class UrlService {
 
 export const UrlModule = angular.module('UrlModule', [ 'ngRoute' ]);
 UrlModule.provider('urlService', UrlProvider);
-
-adapter.upgradeNg1Provider('urlService');

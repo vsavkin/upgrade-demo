@@ -6,29 +6,32 @@ import {
 } from '@angular/common';
 import {
   Component,
-  ComponentResolver,
   Inject,
   Injector,
-  PLATFORM_DIRECTIVES,
-  SkipSelf
+  SkipSelf,
+  NgModule,
+  NgZone,
+  NgModuleFactoryLoader,
+  Compiler
 } from '@angular/core';
 import {
-  ROUTER_DIRECTIVES,
   Route,
   Router,
   RouterOutletMap,
   UrlSerializer,
   UrlTree,
-  provideRouter
+  RouterModule
 } from '@angular/router';
+import {BrowserModule} from '@angular/platform-browser';
 import {UpgradeAdapter} from '@angular/upgrade';
 import * as angular from 'angular'
 import * as angularRoute from 'angular-route'
 
 import {BeastModule} from './beasts/beast_module';
 import {FISH_ROUTES, FishModule} from './ng2fish/ng2_fish_module';
-import {adapter} from './upgrade/adapter';
-import {setUpNG2Router} from './upgrade/router_upgrade';
+import {DolphinCmp} from './ng2fish/ng2_dolphin';
+import {WhaleCmp} from './ng2fish/ng2_whale';
+import {FakeRootCmp, UpgradeRouter, configureModuleRoot, ModuleRootCmp} from './upgrade/router_upgrade';
 
 const rootModule = angular.module('rootModule', [
   'ngRoute',
@@ -56,16 +59,57 @@ rootModule.config([
 			<ul>
 				<li><a href="#/fish/dolphin">Dolphin</a></li>
 				<li><a href="#/fish/whale">Whale</a></li>
-				<li><a href="#/fish/tuna">Tuna</a></li>
 			</ul>
 		`
     });
   }
 ]);
 
-setUpNG2Router(adapter, FISH_ROUTES, (url) => url.startsWith("/fish"));
+@NgModule({
+  imports: [BrowserModule, RouterModule.forRoot(FISH_ROUTES, {useHash: true})],
+  declarations: [DolphinCmp, WhaleCmp, ModuleRootCmp],
+  providers: [
+    {
+      provide : Router,
+      useFactory : createRouter,
+      deps : [
+        UrlSerializer, RouterOutletMap, Location, Injector, NgZone, NgModuleFactoryLoader, Compiler
+      ]
+    }
+  ]
+})
+class AppModule {}
+
+export function createRouter(urlSerializer: UrlSerializer,
+  outletMap: RouterOutletMap,
+  location: Location,
+  injector: Injector,
+  zone: NgZone,
+  loader: NgModuleFactoryLoader,
+  compiler: Compiler) {
+
+  return zone.run(() => {
+    const r =
+      new UpgradeRouter(FakeRootCmp, urlSerializer, outletMap,
+        location, injector, loader, compiler, FISH_ROUTES, (url) => url.startsWith("/fish"));
+    setTimeout(() => {
+      console.log("set up location listener");
+      (<any>r).setUpLocationChangeListener();
+    }, 0);
+
+    return r;
+  });
+}
+
+export const adapter = new UpgradeAdapter(AppModule);
+
+adapter.upgradeNg1Provider('urlService');
+
+console.log("set up module root");
+configureModuleRoot(adapter, FishModule);
 
 export const bootstrap = (el) => {
   const ref = adapter.bootstrap(el, [ 'rootModule' ]);
   setTimeout(() => ref.ng2Injector.get(Router), 0);
 };
+

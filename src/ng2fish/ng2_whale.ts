@@ -6,7 +6,7 @@ import {UrlService} from '../service/url';
 @Component({
   selector : 'whale',
   template : `
-    <h1>Whale</h1>
+    <h1>Ng2 Whale</h1>
     <p>Maybe you would like a <a [routerLink]="unicornLink">unicorn</a> instead.</p>
   `
 })
