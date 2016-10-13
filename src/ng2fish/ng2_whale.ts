@@ -16,4 +16,8 @@ export class WhaleCmp {
   constructor(@Inject('urlService') urlService: UrlService) {
     this.unicornLink = "/" + urlService.getUrl("BEASTS", "unicorn");
   }
+
+  ngOnDestroy() {
+    console.log("<<ngOnDestroy>>");
+  }
 }
